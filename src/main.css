@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-neutral-800;
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
