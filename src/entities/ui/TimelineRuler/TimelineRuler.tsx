@@ -12,6 +12,7 @@ import {
 const TimelineRuler = ({
   shiftPercent,
   zoom,
+  width,
   ...props
 }: TimelineRulerProps) => {
   const canvas = useRef<HTMLCanvasElement | null>(null);
@@ -49,11 +50,13 @@ const TimelineRuler = ({
 
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
+    // const shiftX = (shiftPercent / 100) * width * zoom;
+
     const step = getStep(zoom);
     const segmentWidth = getSegmentWidth(zoom);
     const subTickSegmentWidth = getSubTickSegmentWidth();
     const ticks = getTicks(
-      1440,
+      width * zoom,
       zoom,
       step,
       segmentWidth.min,
@@ -64,8 +67,17 @@ const TimelineRuler = ({
 
     const subTickHeight = getSubTickHeight(ticks.subTicks.length);
 
-    const subTickHeightRule = (index: number) =>
-      (index % (ticks.subTicks.length + 1)) % 2 === 0;
+    const subTickHeightRule = (index: number) => {
+      if (ticks.subTicks.length === 7) {
+        return index % 2 === 0;
+      } else if (ticks.subTicks.length === 15) {
+        return index % 4 !== 0;
+      } else if (ticks.subTicks.length === 31) {
+        return index % 8 !== 0;
+      }
+
+      return false;
+    };
 
     ticks.mainTicks.forEach((tick) => {
       drawMainDash(ctx, tick.x, tick.number.toString());
@@ -77,12 +89,12 @@ const TimelineRuler = ({
         ),
       );
     });
-  }, [zoom, shiftPercent]);
+  }, [zoom, shiftPercent, width]);
 
   return (
     <canvas
       className='border-b border-b-white'
-      width={1440}
+      width={width}
       height={18}
       ref={canvas}
       {...props}

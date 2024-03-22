@@ -7,4 +7,5 @@ export interface TimelineRulerProps
   > {
   shiftPercent: number;
   zoom: number;
+  width: number;
 }

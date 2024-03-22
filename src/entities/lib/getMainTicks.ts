@@ -66,7 +66,7 @@ export const getTicks = (
 
   const mainTicks = getMainTicks(width, step, realTickSegmentWidth);
 
-  if (zoom <= 2) {
+  if (zoom < 2.75) {
     return { mainTicks, subTicks: [] };
   }
 
@@ -77,12 +77,20 @@ export const getTicks = (
   );
 
   let subTickCount = 3;
-  if (zoom >= 3 && zoom <= 4) {
+  if (zoom >= 3.5 && zoom <= 4) {
     subTickCount = 7;
   } else if (zoom >= 4) {
     subTickCount = Math.floor(realTickSegmentWidth / realSubTickSegmentWidth);
     if (subTickCount % 2 === 0) {
       subTickCount -= 1;
+    }
+
+    if (subTickCount === 9 || subTickCount === 11 || subTickCount === 13) {
+      subTickCount = 15;
+    }
+
+    if (subTickCount > 15 && subTickCount < 31) {
+      subTickCount = 31;
     }
   }
 

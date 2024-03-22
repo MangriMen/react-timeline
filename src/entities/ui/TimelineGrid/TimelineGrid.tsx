@@ -8,7 +8,7 @@ import {
   getSubTickSegmentWidth,
 } from '../..';
 
-const TimelineGrid = ({ zoom, ...props }: TimelineGridProps) => {
+const TimelineGrid = ({ width, color, zoom, ...props }: TimelineGridProps) => {
   const ref = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const TimelineGrid = ({ zoom, ...props }: TimelineGridProps) => {
     const tickSegmentWidth = getSegmentWidth(zoom);
     const subTickSegmentWidth = getSubTickSegmentWidth();
     const ticks = getTicks(
-      1440,
+      width * zoom,
       zoom,
       step,
       tickSegmentWidth.min,
@@ -40,18 +40,26 @@ const TimelineGrid = ({ zoom, ...props }: TimelineGridProps) => {
     );
 
     ticks.mainTicks.forEach((tick) => {
-      drawVerticalLine(ctx, tick.x, 1);
+      drawVerticalLine(ctx, tick.x, 1, color);
       if (zoom >= 3) {
         ticks.subTicks.forEach((subTick, i) => {
-          if (i % 2 === 1) {
-            drawVerticalLine(ctx, tick.x + subTick.x, 1);
+          if (i % 2 === 1 || zoom >= 4.25) {
+            drawVerticalLine(ctx, tick.x + subTick.x, 1, color);
           }
         });
       }
     });
-  }, [zoom]);
+  }, [color, width, zoom]);
 
-  return <canvas ref={ref} width={1440} height={1} {...props} />;
+  return (
+    <canvas
+      className='h-full w-full'
+      ref={ref}
+      width={width}
+      height={1}
+      {...props}
+    />
+  );
 };
 
 export default TimelineGrid;
