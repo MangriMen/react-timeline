@@ -1,4 +1,4 @@
-import { Timeline } from './Timeline';
+import { Timeline } from './entities/ui/Timeline';
 
 function App() {
   return (

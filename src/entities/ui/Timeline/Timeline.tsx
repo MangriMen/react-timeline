@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { TimelineRuler } from '../TimelineRuler';
 import { TimelineSlider } from '../TimelineSlider';
+import { TimelineGrid } from '..';
 
 export const Timeline = () => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -57,10 +58,10 @@ export const Timeline = () => {
         <TimelineRuler shiftPercent={zoom > 1 ? shift : 0} zoom={zoom} />
       </div>
       <div className='w-max-full size-full flex flex-col'>
-        <div
-          ref={ref}
-          className='flex size-full touch-pan-y select-none border border-white border-t-transparent'
-        />
+        <div ref={ref} className='flex size-full touch-pan-y select-none '>
+          <TimelineGrid zoom={zoom} shiftPercent={shift} />
+          <div className='flex-1' />
+        </div>
         <div className='flex w-full items-center gap-2'>
           <div className='text-white'>{zoom.toFixed(2)}</div>
           <TimelineSlider
